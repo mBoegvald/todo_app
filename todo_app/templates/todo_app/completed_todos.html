@@ -1,0 +1,16 @@
+{% extends 'todo_app/base.html' %}
+{% block title %}Completed todos{% endblock %}
+{% block content %}
+    <h1>Completed Todos</h1>
+        
+    {% for todo in todos %}
+        <form action="{% url 'todo_app:change_status' %}" method="POST">
+            {% csrf_token %}
+            <input type="checkbox" name="status" onclick="this.form.submit()" {% if todo.status %}checked{% endif %}>
+            <input type="hidden" name="pk" value="{{ todo.pk }}">
+            {{ todo.text }}
+            <button formaction="{% url 'todo_app:delete_todo' %}">Delete</button>
+        </form> 
+    {% endfor %}
+    <a href="{% url 'todo_app:index' %}">Todo list</a>
+{% endblock %}

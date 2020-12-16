@@ -1,0 +1,31 @@
+{% extends 'todo_app/base.html' %}
+{% block title %}Todos{% endblock %}
+{% block content %}
+    <h1>Hello {{user.username}}</h1>
+
+    <a href="{% url 'login_app:logout' %}">Log out</a>
+    {% for todo in todos %}
+        {% if todo.status == False %}   
+            <form action="{% url 'todo_app:change_status' %}" method="POST">
+                {% csrf_token %}
+                <input type="checkbox" name="status" onclick="this.form.submit()" {% if todo.status %}checked{% endif %}>
+                <input type="hidden" name="pk" value="{{ todo.pk }}">
+                {{ todo.text }}
+                <a href="{% url 'todo_app:todo_details' %}?pk={{todo.pk}}">Details</a>
+                <button formaction="{% url 'todo_app:delete_todo' %}">Delete</button>
+            </form> 
+        {% endif %}
+    {% endfor %}
+    <hr>
+    <form action="." method="POST">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="What to do?">
+        <button>Create task</button>
+    </form>
+    
+    <a href="{% url 'todo_app:completed_todos' %}">Completed tasks</a>
+
+    <a href="{% url 'todo_app:pdf_download' %}">Download pdf</a>
+
+    
+{% endblock %}
